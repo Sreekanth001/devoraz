@@ -4,8 +4,11 @@ from app.core.config import settings
 from app.db.database import engine
 from app.db.base import Base
 
-# Create all tables on startup
-Base.metadata.create_all(bind=engine)
+# Create all tables on startup safely
+try:
+    Base.metadata.create_all(bind=engine)
+except Exception as e:
+    print(f"Warning: Could not create tables on startup (read-only filesystem or no DB connection): {e}")
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -23,7 +26,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-from app.api.v1 import dashboard, hospitals, hospital_resources, doctors, nurses, patients, emergency, workflow_api
+from app.api.v1 import dashboard, hospitals, hospital_resources, doctors, nurses, patients, emergency, workflow_api, auth, users
 
 @app.get("/")
 def root():
@@ -38,7 +41,12 @@ async def startup_event():
     try:
         if db.query(Doctor).count() == 0:
             from app.db.seed import seed_db
-            seed_db()
+            try:
+                seed_db()
+            except Exception as e:
+                print(f"Warning: Could not seed database: {e}")
+    except Exception as e:
+        print(f"Warning: Could not query database on startup: {e}")
     finally:
         db.close()
 
@@ -50,3 +58,5 @@ app.include_router(doctors.router, prefix=f"{settings.API_V1_STR}/doctors", tags
 app.include_router(nurses.router, prefix=f"{settings.API_V1_STR}/nurses", tags=["Nurses"])
 app.include_router(patients.router, prefix=f"{settings.API_V1_STR}/patients", tags=["Patients"])
 app.include_router(emergency.router, prefix=f"{settings.API_V1_STR}/emergency", tags=["Emergency"])
+app.include_router(auth.router, prefix=f"{settings.API_V1_STR}/auth", tags=["Auth"])
+app.include_router(users.router, prefix=f"{settings.API_V1_STR}/users", tags=["Users"])

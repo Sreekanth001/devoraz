@@ -5,4 +5,4 @@ import os
 backend_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'backend')
 sys.path.append(backend_path)
 
-from backend.main import app
+from main import app
