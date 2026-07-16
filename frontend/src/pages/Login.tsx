@@ -12,48 +12,27 @@ export function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
-
-  // Auto-bypass login for development
-  useEffect(() => {
-    const autoLogin = async () => {
-      try {
-        const formData = new URLSearchParams();
-        formData.append('username', 'superadmin@medsync.ai');
-        formData.append('password', 'superpassword123');
-
-        const response = await apiClient.post('/auth/login', formData, {
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-        });
-
-        const data = response.data;
-        login(data.access_token, {
-          user_id: data.user_id,
-          role: data.role,
-          hospital_id: data.hospital_id
-        });
-        
-        navigate('/dashboard');
-      } catch (err: any) {
-        console.error('Auto login failed, displaying normal login.', err);
-        setIsLoading(false);
-      }
-    };
-
-    autoLogin();
-  }, [login, navigate]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
 
+    // Hardcoded credentials requirement as requested
+    if (email !== 'admin@123' || password !== 'admin123') {
+      setError('Invalid username or password');
+      setIsLoading(false);
+      return;
+    }
+
     try {
+      // Map to the actual seeded backend user to get a valid JWT
       const formData = new URLSearchParams();
-      formData.append('username', email);
-      formData.append('password', password);
+      formData.append('username', 'superadmin@medsync.ai');
+      formData.append('password', 'superpassword123');
 
       const response = await apiClient.post('/auth/login', formData, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -97,8 +76,8 @@ export function Login() {
               <Label htmlFor="email">Email</Label>
               <Input 
                 id="email" 
-                type="email" 
-                placeholder="admin@medsync.com" 
+                type="text" 
+                placeholder="admin@123" 
                 required 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
