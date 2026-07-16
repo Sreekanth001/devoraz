@@ -3,7 +3,6 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://Sreekanth001.github.io/medsync/",
   "scripts": {
     "dev": "vite",
     "predeploy": "npm run build",
