@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Ambulance as AmbulanceIcon, Plus, MapPin, Navigation, UserCheck } from 'lucide-react';
+import { Ambulance as AmbulanceIcon, Plus, MapPin, Navigation, UserCheck, Activity } from 'lucide-react';
 import { apiClient } from '@/api/apiClient';
 
 interface Ambulance {
