@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { apiClient } from '../api/apiClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,7 +19,7 @@ export function ForgotPassword() {
     setError('');
 
     try {
-      await axios.post('http://localhost:8000/api/v1/auth/forgot-password', { email });
+      await apiClient.post('/auth/forgot-password', { email });
       setSuccess(true);
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Something went wrong. Please try again.');

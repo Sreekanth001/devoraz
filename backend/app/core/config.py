@@ -7,8 +7,10 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8 # 8 days
     # Using SQLite for development since Docker wasn't available
     DATABASE_URL: str = "sqlite:///./medsync.db"
+    CORS_ORIGINS: str = "*"
 
     class Config:
         case_sensitive = True
+        env_file = ".env"
 
 settings = Settings()

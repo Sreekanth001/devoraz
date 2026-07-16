@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import { apiClient } from '../api/apiClient';
 import { useAuth } from '../context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,7 +24,7 @@ export function Login() {
         formData.append('username', 'superadmin@medsync.ai');
         formData.append('password', 'superpassword123');
 
-        const response = await axios.post('http://localhost:8000/api/v1/auth/login', formData, {
+        const response = await apiClient.post('/auth/login', formData, {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
         });
 
@@ -55,7 +55,7 @@ export function Login() {
       formData.append('username', email);
       formData.append('password', password);
 
-      const response = await axios.post('http://localhost:8000/api/v1/auth/login', formData, {
+      const response = await apiClient.post('/auth/login', formData, {
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
       });
 
