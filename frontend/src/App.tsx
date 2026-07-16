@@ -18,8 +18,8 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to="/command" replace />} />
           <Route path="/" element={<DashboardLayout />}>
+            <Route index element={<Navigate to="/command" replace />} />
             <Route path="command" element={<EmergencyCommand />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="hospitals" element={<Hospitals />} />
